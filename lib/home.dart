@@ -8,8 +8,14 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<String> _links = [];
-  String logBug = 'log';
+  String viewLog = 'log';
   final myController = TextEditingController();
+
+  void onChangeLog(val) {
+    setState(() {
+      viewLog = val;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,10 +61,11 @@ class _HomeState extends State<Home> {
                           context: context,
                           builder: (BuildContext context) => AlertDialog(
                             title: const Text('AlertDialog Title'),
-                            content: Text(logBug),
+                            content: Text(viewLog),
                             actions: <Widget>[
                               TextButton(
-                                onPressed: () => Navigator.pop(context, 'Cancel'),
+                                onPressed: () =>
+                                    Navigator.pop(context, 'Cancel'),
                                 child: const Text('Cancel'),
                               ),
                               TextButton(
@@ -103,12 +110,17 @@ class _HomeState extends State<Home> {
           color: Theme.of(context).primaryColor,
           padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 15.0),
           child: Text(url),
-          onPressed: () => _handleURLButtonPress(context, url),
+          onPressed: () => _handleURLButtonPress(context, url, viewLog),
         ));
   }
 
-  void _handleURLButtonPress(BuildContext context, String url) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => WebViewContainer(url: url)));
+  void _handleURLButtonPress(BuildContext context, String url, String viewLog) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => WebViewContainer(
+                url: url,
+                viewLog: viewLog,
+                callBack: (val) => onChangeLog(val))));
   }
 }
